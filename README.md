@@ -34,33 +34,33 @@ pip install -r requirements.txt
 
 ```bash
 # Scrape all trades and save to CSV
-python puckpedia_scraper_v2.py
+python puckpedia_scraper_v3.py
 
 # Scrape with custom output file
-python puckpedia_scraper_v2.py -o my_trades.csv
+python puckpedia_scraper_v3.py -o my_trades.csv
 
 # Save as JSON instead
-python puckpedia_scraper_v2.py -f json -o trades.json
+python puckpedia_scraper_v3.py -f json -o trades.json
 
 # Limit to first 10 pages
-python puckpedia_scraper_v2.py -m 10
+python puckpedia_scraper_v3.py -m 10
 
 # Slower scraping (more polite to server)
-python puckpedia_scraper_v2.py -d 2.0
+python puckpedia_scraper_v3.py -d 2.0
 ```
 
 ### Debug Mode
 
-If the scraper isn't finding trades correctly, use debug mode to save raw HTML:
+If the scraper isn't finding trades correctly, use debug mode to see detailed parsing output:
 
 ```bash
-python puckpedia_scraper_v2.py --debug -m 1
+python puckpedia_scraper_v3.py --debug -m 1
 ```
 
 This will:
-1. Save raw HTML to `debug_html/` directory
-2. Print detailed parsing information
-3. Help identify the correct CSS selectors
+1. Print detailed parsing information for each trade
+2. Show player names and cap hits found
+3. Help verify the scraper is extracting data correctly
 
 ### Command Line Options
 
@@ -123,7 +123,8 @@ Some trades only involve draft picks and unsigned prospects. These trades will h
 
 ## Files
 
-- `puckpedia_scraper_v2.py` - Main scraper script (recommended)
+- `puckpedia_scraper_v3.py` - Main scraper script (recommended) - uses correct CSS selectors based on actual HTML
+- `puckpedia_scraper_v2.py` - Previous version with debug mode
 - `puckpedia_scraper.py` - Original simpler version
 - `requirements.txt` - Python dependencies
 
