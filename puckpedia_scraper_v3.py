@@ -144,8 +144,14 @@ class PuckpediaScraper:
 
     def parse_contract_years(self, text: str) -> tuple[Optional[int], Optional[int]]:
         """
-        Parse contract years from text like 'Yr 3/3' or 'Yr 2/4'.
-        Returns (years_left, total_years).
+        Parse contract years from text like 'Yr 2/4'.
+
+        'Yr 2' = current year of contract (2nd year)
+        '/4' = total contract length (4 years)
+        Returns: (years_left, total_years) where years_left = total - current + 1
+
+        Example: 'Yr 2/4' -> years_left=3, total_years=4 (3 years remaining including this one)
+        Example: 'Yr 2/2' -> years_left=1, total_years=2 (final year of contract)
         """
         if not text:
             return None, None
@@ -153,12 +159,18 @@ class PuckpediaScraper:
         # Look for pattern: Yr X/Y or just X/Y
         match = re.search(r'Yr\s*(\d+)\s*/\s*(\d+)', text, re.IGNORECASE)
         if match:
-            return int(match.group(1)), int(match.group(2))
+            current_year = int(match.group(1))
+            total_years = int(match.group(2))
+            years_left = total_years - current_year + 1
+            return years_left, total_years
 
         # Fallback pattern without Yr prefix
         match = re.search(r'(\d+)\s*/\s*(\d+)', text)
         if match:
-            return int(match.group(1)), int(match.group(2))
+            current_year = int(match.group(1))
+            total_years = int(match.group(2))
+            years_left = total_years - current_year + 1
+            return years_left, total_years
 
         return None, None
 

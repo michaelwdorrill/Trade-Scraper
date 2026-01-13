@@ -189,13 +189,22 @@ class PuckpediaSeleniumScraper:
         return None
 
     def parse_contract_years(self, text: str) -> tuple[Optional[int], Optional[int]]:
-        """Parse contract years from text like 'Yr 2/4' -> (years_left=2, total_years=4)."""
+        """Parse contract years from text like 'Yr 2/4'.
+
+        'Yr 2' = current year of contract (2nd year)
+        '/4' = total contract length (4 years)
+        Returns: (years_left, total_years) where years_left = total - current + 1
+        """
         if not text:
             return None, None
 
-        match = re.search(r'Yr\s*(\d+)/(\d+)', text)
+        # Handle possible space before slash: "Yr 2 /2" or "Yr 2/2"
+        match = re.search(r'Yr\s*(\d+)\s*/\s*(\d+)', text)
         if match:
-            return int(match.group(1)), int(match.group(2))
+            current_year = int(match.group(1))
+            total_years = int(match.group(2))
+            years_left = total_years - current_year + 1
+            return years_left, total_years
         return None, None
 
     def parse_player_card(self, player_div: Tag) -> Optional[PlayerInfo]:
